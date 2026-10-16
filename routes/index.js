@@ -1,17 +1,10 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+const { ensureAuthenticated } = require('../middleware/authenticate');
 
-/* Member's Page */
-router.get('/', ensureAuthenticated, function(req, res, next) {
+// Members-only home page
+router.get('/', ensureAuthenticated, (req, res) => {
   res.render('index', { title: 'Home' });
 });
-
-function ensureAuthenticated(req,res,next) {
-	if(req.isAuthenticated()) {
-		return next();
-	}
-	req.flash('error','You have to Login First.');
-	res.redirect('/users/login');
-}
 
 module.exports = router;

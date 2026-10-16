@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  .row.justify-content-center.mt-5
+    .col-md-6.text-center
+      .display-1.fw-bold.text-muted= (error && error.status) || 500
+      h2.fw-semibold.mb-3= message || 'Something went wrong'
+      p.text-muted.mb-4
+        | The page you are looking for doesn't exist or an unexpected error occurred.
+      if process.env.NODE_ENV === 'development' && error && error.stack
+        pre.text-start.bg-dark.text-white.rounded-3.p-3.small= error.stack
+      a.btn.btn-dark.rounded-3(href='/')
+        i.bi.bi-house-fill.me-2
+        | Go Home

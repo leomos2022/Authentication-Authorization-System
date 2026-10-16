@@ -1,34 +1,126 @@
+/* ============================================================
+   NodeAuth — Custom Styles
+   Bootstrap 5 companion stylesheet
+   ============================================================ */
+
+/* Base */
 body {
-  padding-top: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  padding-top: 70px; /* compensate fixed navbar */
+  background-color: #f8f9fa;
+  color: #212529;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
-a {
-  color: #00B7FF;
+/* ============================================================
+   Auth icon (used on login / register cards)
+   ============================================================ */
+.auth-icon {
+  width: 64px;
+  height: 64px;
+  background: #212529;
+  color: #fff;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
 }
 
-ul.success li, ul.info li, ul.error li {
-	margin: 20px 0px 20px 0px;
-	padding: 15px;
-	border:1px solid transparent;
-	border-radius:5px;
-	list-style: none;
+/* ============================================================
+   Avatar — small initials circle (navbar dropdown trigger)
+   ============================================================ */
+.avatar-initials {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #fff;
+  color: #212529;
+  font-size: 0.8rem;
+  font-weight: 700;
+  vertical-align: middle;
 }
 
-ul.success li {
-	color:#3c763d;
-	background-color: #dff0d8;
-	border-color:#d6e9c6;
+/* ============================================================
+   Avatar — large (dashboard hero)
+   ============================================================ */
+.avatar-lg {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  border: 3px solid rgba(255, 255, 255, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
 }
 
-ul.info li {
-	color:#31708f;
-	background-color: #dff0d8;
-	border-color:#d6e9c6;
+/* ============================================================
+   Dashboard hero card gradient
+   ============================================================ */
+.bg-gradient-dark {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
 }
 
-ul.error li {
-	color:red;
-	background-color: rgba(255, 0, 0, 0.12);
-	border-color:#d6e9c6;
+/* ============================================================
+   Stat icon wrapper (dashboard stat cards)
+   ============================================================ */
+.stat-icon {
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   Feature icon wrapper (dashboard feature cards)
+   ============================================================ */
+.feature-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ============================================================
+   Form controls — subtle focus ring override
+   ============================================================ */
+.form-control:focus {
+  border-color: #212529;
+  box-shadow: 0 0 0 0.2rem rgba(33, 37, 41, 0.15);
+}
+
+/* ============================================================
+   Cards — smooth hover lift
+   ============================================================ */
+.card {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1) !important;
+}
+
+/* ============================================================
+   Navbar brand icon color
+   ============================================================ */
+.navbar-brand .bi-shield-lock-fill {
+  color: #6ea8fe;
+}
+
+/* ============================================================
+   Password strength bar transition
+   ============================================================ */
+.progress-bar {
+  transition: width 0.3s ease, background-color 0.3s ease;
 }

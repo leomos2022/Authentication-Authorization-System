@@ -1,0 +1,81 @@
+extends layout
+
+block content
+  //- Hero / Welcome section
+  .row.mb-5
+    .col-12
+      .card.border-0.rounded-4.text-white.bg-gradient-dark.shadow
+        .card-body.p-4.p-md-5
+          .d-flex.align-items-center.gap-4.flex-wrap
+            .avatar-lg.flex-shrink-0
+              span= user.name ? user.name.charAt(0).toUpperCase() : user.username.charAt(0).toUpperCase()
+            div
+              h1.fw-bold.mb-1 Welcome back, #{user.name || user.username}!
+              p.mb-1.opacity-75
+                i.bi.bi-envelope.me-1
+                | #{user.email}
+              p.mb-0.opacity-75
+                i.bi.bi-calendar3.me-1
+                | Member since #{new Date(user.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+
+  //- Stats cards row
+  .row.g-4.mb-5
+    .col-sm-6.col-lg-3
+      .card.border-0.rounded-4.shadow-sm.h-100
+        .card-body.d-flex.align-items-center.gap-3.p-4
+          .stat-icon.bg-success-subtle.text-success.rounded-3
+            i.bi.bi-shield-check-fill.fs-3
+          div
+            .text-muted.small Account Status
+            .fw-bold.fs-5 Active
+    .col-sm-6.col-lg-3
+      .card.border-0.rounded-4.shadow-sm.h-100
+        .card-body.d-flex.align-items-center.gap-3.p-4
+          .stat-icon.bg-primary-subtle.text-primary.rounded-3
+            i.bi.bi-person-badge-fill.fs-3
+          div
+            .text-muted.small Role
+            .fw-bold.fs-5 Member
+    .col-sm-6.col-lg-3
+      .card.border-0.rounded-4.shadow-sm.h-100
+        .card-body.d-flex.align-items-center.gap-3.p-4
+          .stat-icon.bg-warning-subtle.text-warning.rounded-3
+            i.bi.bi-lock-fill.fs-3
+          div
+            .text-muted.small Auth Method
+            .fw-bold.fs-5 Password
+    .col-sm-6.col-lg-3
+      .card.border-0.rounded-4.shadow-sm.h-100
+        .card-body.d-flex.align-items-center.gap-3.p-4
+          .stat-icon.bg-info-subtle.text-info.rounded-3
+            i.bi.bi-box-arrow-in-right.fs-3
+          div
+            .text-muted.small Session
+            .fw-bold.fs-5 Live
+
+  //- Features row
+  .row.g-4
+    .col-md-4
+      .card.border-0.rounded-4.shadow-sm.h-100
+        .card-body.p-4
+          .feature-icon.bg-dark.text-white.rounded-3.mb-3
+            i.bi.bi-fingerprint.fs-4
+          h5.fw-bold Bcrypt Hashing
+          p.text-muted.mb-0
+            | Passwords are hashed with bcrypt (salt rounds: 10), making brute-force attacks computationally infeasible.
+    .col-md-4
+      .card.border-0.rounded-4.shadow-sm.h-100
+        .card-body.p-4
+          .feature-icon.bg-dark.text-white.rounded-3.mb-3
+            i.bi.bi-shield-shaded.fs-4
+          h5.fw-bold Session Management
+          p.text-muted.mb-0
+            | Passport.js manages sessions with serialize/deserialize. Only the user ID is stored in the session cookie.
+    .col-md-4
+      .card.border-0.rounded-4.shadow-sm.h-100
+        .card-body.p-4
+          .feature-icon.bg-dark.text-white.rounded-3.mb-3
+            i.bi.bi-speedometer2.fs-4
+          h5.fw-bold Rate Limiting
+          p.text-muted.mb-0
+            | Login endpoint is protected against brute-force with 10 attempts per 15-minute window per IP address.

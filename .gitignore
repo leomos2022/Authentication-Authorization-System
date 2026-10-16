@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+
+# Environment variables
+.env
+
+# Uploaded files
+uploads/*
+!uploads/.gitkeep
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage / test artifacts
+coverage/
+.nyc_output/
+
+# Build output
+dist/
+build/
+
+# Editor directories and files
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

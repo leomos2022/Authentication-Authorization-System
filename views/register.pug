@@ -1,0 +1,144 @@
+extends layout
+
+block content
+  .row.justify-content-center
+    .col-md-7.col-lg-6
+      .card.shadow-sm.border-0.rounded-4
+        .card-body.p-4.p-md-5
+          .text-center.mb-4
+            .auth-icon.mx-auto.mb-3
+              i.bi.bi-person-plus-fill
+            h2.fw-bold Register
+            p.text-muted Create your account to get started
+
+          //- Validation errors
+          if errors && errors.length
+            .alert.alert-danger.rounded-3(role='alert')
+              i.bi.bi-exclamation-triangle-fill.me-2
+              strong Please fix the following:
+              ul.mb-0.mt-2
+                each error in errors
+                  li= error.msg
+
+          form(method='post', action='/users/register', enctype='multipart/form-data', novalidate)
+
+            .form-floating.mb-3
+              input#name.form-control.rounded-3(
+                type='text',
+                name='name',
+                placeholder='Full Name',
+                value=name || '',
+                autocomplete='name'
+              )
+              label(for='name')
+                i.bi.bi-person.me-1
+                | Full Name
+
+            .row.g-3.mb-3
+              .col-sm-6
+                .form-floating
+                  input#email.form-control.rounded-3(
+                    type='email',
+                    name='email',
+                    placeholder='Email Address',
+                    value=email || '',
+                    autocomplete='email'
+                  )
+                  label(for='email')
+                    i.bi.bi-envelope.me-1
+                    | Email
+              .col-sm-6
+                .form-floating
+                  input#username.form-control.rounded-3(
+                    type='text',
+                    name='username',
+                    placeholder='Username',
+                    value=username || '',
+                    autocomplete='username'
+                  )
+                  label(for='username')
+                    i.bi.bi-at.me-1
+                    | Username
+
+            .form-floating.mb-1
+              input#password.form-control.rounded-3(
+                type='password',
+                name='password',
+                placeholder='Password',
+                autocomplete='new-password'
+              )
+              label(for='password')
+                i.bi.bi-lock.me-1
+                | Password
+
+            //- Password strength indicator
+            .mb-3
+              .progress(style='height: 4px;')
+                #password-strength-bar.progress-bar(role='progressbar', style='width: 0%')
+              small#password-strength-text.text-muted
+
+            .form-floating.mb-3
+              input#confirmPassword.form-control.rounded-3(
+                type='password',
+                name='confirmPassword',
+                placeholder='Confirm Password',
+                autocomplete='new-password'
+              )
+              label(for='confirmPassword')
+                i.bi.bi-lock-fill.me-1
+                | Confirm Password
+
+            .mb-3
+              label.form-label.text-muted(for='profile')
+                i.bi.bi-image.me-1
+                | Profile Image (optional)
+              input#profile.form-control.rounded-3(type='file', name='profile', accept='image/*')
+
+            .d-grid.mt-4
+              button.btn.btn-dark.btn-lg.rounded-3(type='submit')
+                i.bi.bi-person-check.me-2
+                | Create Account
+
+          hr.my-4
+          p.text-center.text-muted.mb-0
+            | Already have an account?&nbsp;
+            a.fw-semibold(href='/users/login') Sign in
+
+block scripts
+  script.
+    const passwordInput = document.getElementById('password');
+    const strengthBar = document.getElementById('password-strength-bar');
+    const strengthText = document.getElementById('password-strength-text');
+
+    function getStrength(password) {
+      let score = 0;
+      if (password.length >= 8) score++;
+      if (password.length >= 12) score++;
+      if (/[A-Z]/.test(password)) score++;
+      if (/[0-9]/.test(password)) score++;
+      if (/[^A-Za-z0-9]/.test(password)) score++;
+      return score;
+    }
+
+    passwordInput.addEventListener('input', function () {
+      const val = this.value;
+      if (!val) {
+        strengthBar.style.width = '0%';
+        strengthBar.className = 'progress-bar';
+        strengthText.textContent = '';
+        return;
+      }
+      const score = getStrength(val);
+      const levels = [
+        { width: '20%', cls: 'bg-danger',  label: 'Very weak' },
+        { width: '40%', cls: 'bg-warning', label: 'Weak' },
+        { width: '60%', cls: 'bg-info',    label: 'Fair' },
+        { width: '80%', cls: 'bg-primary', label: 'Strong' },
+        { width: '100%', cls: 'bg-success', label: 'Very strong' },
+      ];
+      const level = levels[Math.min(score, levels.length) - 1] || levels[0];
+      strengthBar.style.width = level.width;
+      strengthBar.className = 'progress-bar ' + level.cls;
+      strengthText.textContent = level.label;
+      strengthText.className = 'small ' + level.cls.replace('bg-', 'text-');
+    });

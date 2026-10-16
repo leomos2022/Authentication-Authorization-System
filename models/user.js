@@ -1,24 +1,36 @@
-var mongoose 	=	 require('mongoose');
+const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/nodeauth');
+const UserSchema = new mongoose.Schema(
+  {
+    username: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+      index: true,
+    },
+    password: {
+      type: String,
+      required: true,
+      minlength: 6,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+      lowercase: true,
+    },
+    name: {
+      type: String,
+      trim: true,
+    },
+    profile: {
+      type: String,
+      default: 'noImage.png',
+    },
+  },
+  { timestamps: true }
+);
 
-var db 			=	 mongoose.connection;
-
-
-//User Schema
-var UserSchema 	=  mongoose.Schema({
-	username : {
-		type 	: String,
-		index	: true
-	},
-	password :	{
-		type 	: String, 
-		required: true, 
-		bcrypt  : true
-	},
-	email 		: String,
-	name 		: String,
-	profile 	: String
-});
-
-module.exports =  mongoose.model('User', UserSchema);
+module.exports = mongoose.model('User', UserSchema);

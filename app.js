@@ -1,103 +1,91 @@
-var express 			= 	require('express');
-var path 				= 	require('path');
-var favicon 			= 	require('serve-favicon');
-var logger 				= 	require('morgan');
-var expressValidator 	= 	require('express-validator');
-var cookieParser 		= 	require('cookie-parser');
-var bodyParser 			= 	require('body-parser');
-var session				= 	require('express-session');
-var passport			= 	require('passport');
-var localStrategy		=	require('passport-local').Strategy;
-var multer				= 	require('multer');
-var flash 				=	require('connect-flash');
-var mongo				=	require('mongodb');
-var mongoose			=	require('mongoose');
-var db 					=	mongoose.connection;
+require('dotenv').config();
 
-var routes 				= 	require('./routes/index');
-var users				=	require('./routes/users');
+const express = require('express');
+const path = require('path');
+const favicon = require('serve-favicon');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const session = require('express-session');
+const multer = require('multer');
+const flash = require('connect-flash');
 
-var app = express();
+const connectDB = require('./config/database');
+const passport = require('./config/passport');
 
-// view engine setup
+const routes = require('./routes/index');
+const users = require('./routes/users');
+
+// Connect to database
+connectDB();
+
+const app = express();
+
+// View engine
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.set('view engine', 'pug');
 
-//Handle File Uploads
-app.use(multer({dest:__dirname+'/uploads/'}).any());
+// File uploads
+app.use(multer({ dest: path.join(__dirname, 'uploads') }).any());
 
-// uncomment after placing your favicon in /public
+// Favicon
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+
+// HTTP logger
 app.use(logger('dev'));
+
+// Body parsing
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
 
-//Handle EXpress Sessions
-app.use(session({
-	secret:'secret' ,
-	saveUninitialized: true,
-	resave: true
-}));
+// Session
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    saveUninitialized: false,
+    resave: false,
+  })
+);
 
-//Paasport
+// Passport authentication
 app.use(passport.initialize());
 app.use(passport.session());
 
-
-///Validator
-app.use(expressValidator({
-	errorFormator: function(param,msg,value) {
-		var namespace = param.split('.')
-		, root = namespace.shift()
-		, formParam = root;
-
-		while(namespace.length) {
-			formParam += '[' + namespace.shift() + ']';
-		}
-
-		return {
-			param 	: formParam,
-			msg 	: msg,
-			value	: value
-		};
-	}
-}));
-
-
-app.use(cookieParser());
+// Static files
 app.use(express.static(path.join(__dirname, 'public')));
 
-
+// Flash messages
 app.use(flash());
-app.use(function(req,res,next) {
-	res.locals.messages = require('express-messages')(req,res);
-	next();
+app.use((req, res, next) => {
+  // Expose flash messages as locals for Bootstrap 5 Toasts
+  res.locals.flashSuccess = req.flash('success');
+  res.locals.flashError = req.flash('error');
+  res.locals.flashInfo = req.flash('info');
+  next();
 });
 
-
-app.get('*', function(req,res,next) {
-	//local variable to hold user info
-	res.locals.user = req.user ||  null;
-	next();
+// Expose authenticated user to all views
+app.use((req, res, next) => {
+  res.locals.user = req.user || null;
+  next();
 });
 
+// Routes
 app.use('/', routes);
-app.use('/users',users);
+app.use('/users', users);
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
+// 404 handler
+app.use((req, res, next) => {
+  const err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
+// Error handler
+app.use((err, req, res, next) => {
   res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
+  res.locals.error = process.env.NODE_ENV === 'development' ? err : {};
   res.status(err.status || 500);
   res.render('error');
 });
